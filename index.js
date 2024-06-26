@@ -1,25 +1,27 @@
 const express = require("express");
-const jsonServer = require("json-server");
 const cors = require("cors");
-const compression = require("compression");
+const questionsData = require("./data/questions.json");
 
 const app = express();
-const router = jsonServer.router("./data/questions.json");
-const middlewares = jsonServer.defaults();
-
 const PORT = process.env.PORT || 3001;
 
-// Add compression middleware
-app.use(compression());
-app.use(middlewares);
 app.use(cors());
-app.use(router);
+
+// Endpoint for questions
+app.get("/questions", (req, res) => {
+  const questions = questionsData.questions;
+  res.json(questions);
+});
+
+// Endpoint for highscores
+app.get("/highscore", (req, res) => {
+  const highscores = questionsData.highscore;
+  res.json(highscores);
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-
-module.exports = app; // Export app for Vercel
 
 /* const jsonServer = require("json-server");
 const server = jsonServer.create();
